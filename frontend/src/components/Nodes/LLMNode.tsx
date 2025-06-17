@@ -3,8 +3,7 @@ import { Handle, Position, NodeProps } from 'reactflow';
 import { Box, Typography, Paper } from '@mui/material';
 
 const CustomNode = ({ data }: NodeProps) => {
-  console.log(data);
-  console.log('I am here');
+  
   return (
 
     
@@ -52,7 +51,7 @@ const CustomNode = ({ data }: NodeProps) => {
           }}>
             <img
               src={data.icon}
-              alt={data.label}
+              alt={data.provider}
               style={{
                 width: '100%',
                 height: '100%',
@@ -70,7 +69,7 @@ const CustomNode = ({ data }: NodeProps) => {
             fontSize: '0.9rem',
           }}
         >
-          {data.label}
+          {data.provider}
         </Typography>
         
         {data.description && (
