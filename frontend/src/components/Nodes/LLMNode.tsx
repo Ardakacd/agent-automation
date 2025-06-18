@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { Box, Typography, Paper } from '@mui/material';
+import { Box, Typography, Paper, InputLabel } from '@mui/material';
 
 const CustomNode = ({ data }: NodeProps) => {
   
@@ -22,23 +22,12 @@ const CustomNode = ({ data }: NodeProps) => {
         },
       }}
     >
-      <Handle
-        type="source"
-        isConnectableStart={true}
-        position={Position.Right}
-        style={{
-          background: '#555',
-          width: 8,
-          height: 8,
-        }}
-        
-      />
+      
       
       
       <Box sx={{ 
         display: 'flex', 
         flexDirection: 'column', 
-        gap: 1,
         alignItems: 'center',
       }}>
         {data.icon && (
@@ -67,6 +56,7 @@ const CustomNode = ({ data }: NodeProps) => {
             color: '#2c3e50',
             textAlign: 'center',
             fontSize: '0.9rem',
+            mb: 1
           }}
         >
           {data.provider}
@@ -79,13 +69,50 @@ const CustomNode = ({ data }: NodeProps) => {
               color: '#666',
               textAlign: 'center',
               fontSize: '0.8rem',
+              
             }}
           >
             {data.description}
           </Typography>
-        )}
+        )}      
       </Box>
 
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <InputLabel sx={{ fontSize: '0.8rem', color: '#666', marginBottom: -1.6 }}>
+        Tools
+      </InputLabel>
+
+      <Handle
+        type="source"
+        isConnectableStart={true}
+        position={Position.Bottom}
+        style={{
+          background: '#555',
+          width: 8,
+          height: 8,
+        }}
+        id='bottom-handle'
+      />
+      
+      
+      </Box>
+
+      <Handle
+        type="source"
+        isConnectableStart={true}
+        position={Position.Right}
+        style={{
+          background: '#555',
+          width: 8,
+          height: 8,
+        }}
+        id='right-handle'
+        
+      />
+
+      
+
+      
       <Handle
         type="target"
         position={Position.Left}
