@@ -47,7 +47,7 @@ const ToolNode = ({ data }: NodeProps) => {
     >
       <Handle
         type="target"
-        position={Position.Left}
+        position={Position.Top}
         isConnectableEnd={true}
         style={{
           background: '#00ff9d',
@@ -79,7 +79,7 @@ const ToolNode = ({ data }: NodeProps) => {
           }}>
             <img
               src={data.icon}
-              alt={data.label}
+              alt={data.name}
               style={{
                 width: '100%',
                 height: '100%',
@@ -104,21 +104,11 @@ const ToolNode = ({ data }: NodeProps) => {
             letterSpacing: '0.5px',
           }}
         >
-          {data.label}
+          {data.name}
         </Typography>
       </Box>
 
-      <Handle
-        type="source"
-        position={Position.Right}
-        isConnectableStart={true}
-        style={{
-          background: '#00ff9d',
-          width: 8,
-          height: 8,
-          border: '2px solid #1a1a1a',
-        }}
-      />
+     
     </Box>
   );
 };
