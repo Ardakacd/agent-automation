@@ -3,7 +3,6 @@ import { Handle, Position, NodeProps } from 'reactflow';
 import { Box, Typography } from '@mui/material';
 
 const ToolNode = ({ data }: NodeProps) => {
-  console.log('ToolNode data:', data); // Debug log
 
   return (
     <Box
