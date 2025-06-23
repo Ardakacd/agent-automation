@@ -25,8 +25,8 @@ const NodeSection: React.FC<NodeSectionProps> = ({ node, onNodeAdd }) => {
             src={node.icon} 
             alt={node.label}
             style={{  objectFit: 'contain' }}
-            width={24}
-            height={24}
+            width={32}
+            height={32}
           />
         </Box>
         <Typography variant="h6">
@@ -59,8 +59,8 @@ const NodeSection: React.FC<NodeSectionProps> = ({ node, onNodeAdd }) => {
               <Image 
                 src={item.icon} 
                 alt={item.name}
-                width={24}
-                height={24}
+                width={28}
+                height={28}
                 style={{ objectFit: 'contain' }}
               />
             </Box>
