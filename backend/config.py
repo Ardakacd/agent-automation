@@ -13,11 +13,16 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: str = "http://localhost:3000"  # Default to localhost
     
     # Database settings
-    DATABASE_URL: Optional[str] = None
+    DB_HOST: str
+    DB_PORT: int 
+    DB_NAME: str 
+    DB_USER: str 
+    DB_PASSWORD: str 
+    
     
     # Security settings
-    SECRET_KEY: str = "your-secret-key-here"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
+    SECRET_KEY: str
+    ALGORITHM: str
     
     # File upload settings
     UPLOAD_DIR: str = "uploads"
