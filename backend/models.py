@@ -26,3 +26,16 @@ class WorkflowExecution(BaseModel):
 class RAGQuery(BaseModel):
     query: str
     k: Optional[int] = 4 
+
+class User(BaseModel):
+    id: Optional[str] = None
+    name: str
+    email: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    user_id: str | None = None
