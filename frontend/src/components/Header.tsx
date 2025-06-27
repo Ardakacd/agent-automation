@@ -1,150 +1,134 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   AppBar, 
   Toolbar, 
   Typography, 
   Button, 
   Box,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField
+  Avatar,
+  Menu,
+  MenuItem,
+  IconButton,
 } from '@mui/material';
+import { useRouter } from 'next/router';
+import { userService } from '../services/api';
 
 const Header: React.FC = () => {
-  const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isSignupOpen, setIsSignupOpen] = useState(false);
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      const profile = await userService.getProfile();
+      setUserProfile(profile);
+      setIsLoggedIn(true);
+    } catch (error) {
+      setIsLoggedIn(false);
+      setUserProfile(null);
+    }
+  };
 
   const handleLogin = () => {
-    setIsLoginOpen(true);
+    router.push('/login');
   };
 
   const handleSignup = () => {
-    setIsSignupOpen(true);
+    router.push('/register');
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    try {
+      await userService.logout();
+      setIsLoggedIn(false);
+      setUserProfile(null);
+      setAnchorEl(null);
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if logout fails, clear local state
+      setIsLoggedIn(false);
+      setUserProfile(null);
+      setAnchorEl(null);
+      router.push('/login');
+    }
   };
 
-  const handleLoginSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // login logic
-    setIsLoginOpen(false);
-    setIsLoggedIn(true);
+  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  const handleSignupSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // signup logic
-    setIsSignupOpen(false);
-    setIsLoggedIn(true);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleProfile = () => {
+    handleMenuClose();
+    // You can add a profile page route here if needed
+    console.log('Profile clicked');
   };
 
   return (
-    <>
-      <AppBar position="static" color="default" elevation={1}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Agent Automation
-          </Typography>
-          <Box>
-            {isLoggedIn ? (
-              <Button color="inherit" onClick={handleLogout}>
-                Logout
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar>
+        <Typography 
+          variant="h6" 
+          component="div" 
+          sx={{ flexGrow: 1, cursor: 'pointer' }}
+          onClick={() => router.push('/')}
+        >
+          Agent Automation
+        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          {isLoggedIn ? (
+            <>
+              <Typography variant="body2" sx={{ mr: 1 }}>
+                Welcome, {userProfile?.name || 'User'}
+              </Typography>
+              <IconButton
+                onClick={handleProfileClick}
+                sx={{ p: 0 }}
+              >
+                <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+                  {userProfile?.name?.charAt(0)?.toUpperCase() || 'U'}
+                </Avatar>
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+              >
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </>
+          ) : (
+            <>
+              <Button color="inherit" onClick={handleLogin}>
+                Login
               </Button>
-            ) : (
-              <>
-                <Button color="inherit" onClick={handleLogin}>
-                  Login
-                </Button>
-                <Button color="inherit" onClick={handleSignup}>
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {/* Login Dialog */}
-      <Dialog open={isLoginOpen} onClose={() => setIsLoginOpen(false)}>
-        <DialogTitle>Login</DialogTitle>
-        <form onSubmit={handleLoginSubmit}>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="outlined"
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Password"
-              type="password"
-              fullWidth
-              variant="outlined"
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsLoginOpen(false)}>Cancel</Button>
-            <Button type="submit" variant="contained">Login</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-
-      {/* Signup Dialog */}
-      <Dialog open={isSignupOpen} onClose={() => setIsSignupOpen(false)}>
-        <DialogTitle>Sign Up</DialogTitle>
-        <form onSubmit={handleSignupSubmit}>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Name"
-              type="text"
-              fullWidth
-              variant="outlined"
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="outlined"
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Password"
-              type="password"
-              fullWidth
-              variant="outlined"
-              required
-            />
-            <TextField
-              margin="dense"
-              label="Confirm Password"
-              type="password"
-              fullWidth
-              variant="outlined"
-              required
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setIsSignupOpen(false)}>Cancel</Button>
-            <Button type="submit" variant="contained">Sign Up</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </>
+              <Button color="inherit" onClick={handleSignup}>
+                Sign Up
+              </Button>
+            </>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 
