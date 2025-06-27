@@ -29,6 +29,69 @@ export interface WorkflowExecution {
   input: string;
 }
 
+export interface User {
+  id?: string;
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+// User service
+export const userService = {
+  // Login user
+  login: async (credentials: LoginCredentials) => {
+    const response = await axios.post(`${API_BASE_URL}/user/login`, credentials, {
+      withCredentials: true, // Important for cookies
+    });
+    return response.data;
+  },
+
+  // Register user
+  register: async (user: User) => {
+    const response = await axios.post(`${API_BASE_URL}/user/register`, user, {
+      withCredentials: true, // Important for cookies
+    });
+    return response.data;
+  },
+
+  // Logout user
+  logout: async () => {
+    const response = await axios.post(`${API_BASE_URL}/user/logout`, {}, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  // Get user profile
+  getProfile: async () => {
+    const response = await axios.get(`${API_BASE_URL}/user/profile`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  // Update user profile
+  updateProfile: async (user: Partial<User>) => {
+    const response = await axios.put(`${API_BASE_URL}/user/profile`, user, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  // Delete user account
+  deleteAccount: async () => {
+    const response = await axios.delete(`${API_BASE_URL}/user/profile`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+};
+
 // API calls
 export const workflowService = {
   // Create a new workflow
